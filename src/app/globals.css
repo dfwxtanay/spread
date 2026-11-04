@@ -1,0 +1,641 @@
+:root {
+  --claret: #7a1424;
+  --claret-soft: #b23a4a;
+  --ask: #e0586c;
+  --ink: #0b0709;
+  --ink-2: #120c0d;
+  --bone: #efe7da;
+  --bone-dim: rgba(239, 231, 218, 0.62);
+  --line: rgba(239, 231, 218, 0.1);
+  --flash-up: rgba(239, 231, 218, 0.24);
+  --flash-down: rgba(224, 88, 108, 0.32);
+  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: Menlo, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--sans);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--bone);
+  outline-offset: -2px;
+}
+
+kbd {
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  color: var(--bone-dim);
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 1px 4px;
+}
+
+.is-up {
+  color: var(--bone);
+}
+
+.is-down {
+  color: var(--ask);
+}
+
+/* Shell */
+.terminal {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.topbar {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex: none;
+  gap: 20px;
+  height: 52px;
+  padding: 0 16px;
+}
+
+.topbar h1 {
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.topbar sup {
+  color: var(--ask);
+  font-size: 12px;
+  font-weight: 300;
+}
+
+.headline {
+  align-items: baseline;
+  display: flex;
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  gap: 10px;
+}
+
+.headline strong {
+  font-family: var(--sans);
+}
+
+.headline small {
+  font-size: 11px;
+}
+
+.search {
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--bone-dim);
+  display: flex;
+  gap: 12px;
+  margin-left: auto;
+  padding: 6px 10px;
+}
+
+.search:hover {
+  border-color: var(--bone-dim);
+}
+
+.source {
+  color: var(--bone-dim);
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+.status {
+  align-items: center;
+  display: flex;
+  font-family: var(--mono);
+  font-size: 11px;
+  gap: 7px;
+  min-width: 124px;
+  text-transform: uppercase;
+}
+
+.status i {
+  background: var(--bone);
+  border-radius: 50%;
+  height: 7px;
+  width: 7px;
+}
+
+.status--stale i,
+.status--reconnecting i,
+.status--connecting i {
+  background: var(--ask);
+}
+
+.banner {
+  background: var(--claret);
+  flex: none;
+  font-size: 12px;
+  padding: 7px 16px;
+}
+
+.grid {
+  display: grid;
+  flex: 1;
+  gap: 1px;
+  background: var(--line);
+  grid-template-areas:
+    "markets chart book"
+    "markets trades book"
+    "markets trades perf";
+  grid-template-columns: 228px minmax(0, 1fr) 348px;
+  grid-template-rows: minmax(0, 1fr) 112px 196px;
+  min-height: 0;
+}
+
+.panel {
+  background: var(--ink-2);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.panel__head {
+  align-items: center;
+  display: flex;
+  flex: none;
+  height: 34px;
+  justify-content: space-between;
+  padding: 0 12px;
+}
+
+.panel__head h2 {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.panel__head span {
+  color: var(--bone-dim);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+/* Markets */
+.markets {
+  grid-area: markets;
+}
+
+.markets__list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.market {
+  align-items: center;
+  border-left: 2px solid transparent;
+  display: flex;
+  justify-content: space-between;
+  padding: 9px 12px 9px 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.market:hover {
+  background: rgba(239, 231, 218, 0.04);
+}
+
+.market[aria-current="true"] {
+  background: rgba(122, 20, 36, 0.32);
+  border-left-color: var(--ask);
+}
+
+.market__name,
+.market__price {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.market__price {
+  align-items: flex-end;
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+}
+
+.market small {
+  color: var(--bone-dim);
+  font-size: 11px;
+}
+
+.market small.is-down {
+  color: var(--ask);
+}
+
+.markets__hint {
+  border-top: 1px solid var(--line);
+  color: var(--bone-dim);
+  flex: none;
+  font-size: 11px;
+  padding: 10px 12px;
+}
+
+/* Chart */
+.chart {
+  grid-area: chart;
+}
+
+.chart__plot {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+.chart__plot canvas {
+  display: block;
+  height: 100%;
+  inset: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.chart__empty {
+  color: var(--bone-dim);
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Order book */
+.book {
+  grid-area: book;
+}
+
+.book__columns,
+.book__row,
+.trades__columns,
+.trade {
+  display: grid;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  grid-template-columns: 1.15fr 1fr 1fr;
+  padding: 0 12px;
+}
+
+.book__columns,
+.trades__columns {
+  color: var(--bone-dim);
+  flex: none;
+  font-size: 10px;
+  padding-bottom: 6px;
+}
+
+.book__columns span:not(:first-child),
+.book__row span:not(.book__price),
+.trades__columns span:not(:first-child),
+.trade > :not(:first-child) {
+  text-align: right;
+}
+
+.book__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.book__side {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.book__side--asks {
+  justify-content: flex-end;
+}
+
+.book__row {
+  align-items: center;
+  flex: none;
+  height: 19px;
+  contain: layout paint;
+  position: relative;
+}
+
+.book__row > span:not(.book__depth) {
+  position: relative;
+}
+
+.book__row--ask .book__price {
+  color: var(--ask);
+}
+
+/* transform is cheap for the browser: it never triggers layout. */
+.book__depth {
+  bottom: 1px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 1px;
+  transform-origin: right;
+}
+
+.book__row--bid .book__depth {
+  background: rgba(239, 231, 218, 0.11);
+}
+
+.book__row--ask .book__depth {
+  background: rgba(224, 88, 108, 0.17);
+}
+
+.book__spread {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  color: var(--bone-dim);
+  display: flex;
+  flex: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  gap: 12px;
+  height: 30px;
+  justify-content: space-between;
+  padding: 0 12px;
+}
+
+.book__spread strong {
+  color: var(--bone);
+}
+
+.book__skeleton {
+  animation: pulse 1.2s ease-in-out infinite;
+  background: rgba(239, 231, 218, 0.05);
+  flex: 1;
+  margin: 12px;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* Trades */
+.trades {
+  grid-area: trades;
+}
+
+.trades__list {
+  flex: 1;
+  list-style: none;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.trade {
+  line-height: 19px;
+}
+
+.trade--buy span:first-child {
+  color: var(--bone);
+}
+
+.trade--sell span:first-child {
+  color: var(--ask);
+}
+
+.trade time {
+  color: var(--bone-dim);
+}
+
+/* Performance */
+.perf {
+  grid-area: perf;
+}
+
+.perf__grid {
+  display: grid;
+  flex: 1;
+  gap: 1px;
+  background: var(--line);
+  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  grid-template-columns: 1fr 1fr;
+}
+
+.perf__grid > div {
+  background: var(--ink-2);
+  padding: 8px 12px;
+}
+
+.perf dt {
+  color: var(--bone-dim);
+  font-size: 11px;
+}
+
+.perf dd {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  margin-top: 2px;
+}
+
+.perf__actions {
+  display: grid;
+  flex: none;
+  gap: 8px;
+  grid-template-columns: 1.2fr 1fr auto;
+  padding: 10px 12px;
+}
+
+.perf__actions button {
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  display: flex;
+  font-size: 12px;
+  gap: 8px;
+  justify-content: center;
+  padding: 6px 8px;
+}
+
+.perf__actions button:hover {
+  border-color: var(--bone-dim);
+}
+
+.perf__actions button[aria-pressed="true"] {
+  background: var(--bone);
+  border-color: var(--bone);
+  color: var(--ink);
+}
+
+.perf__actions button[aria-pressed="true"] kbd {
+  border-color: rgba(11, 7, 9, 0.3);
+  color: var(--ink);
+}
+
+/* Command palette */
+.palette {
+  background: rgba(11, 7, 9, 0.72);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 14vh 16px 16px;
+  position: fixed;
+  z-index: 10;
+}
+
+.palette__box {
+  align-self: flex-start;
+  background: #1a1214;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  max-width: 440px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.palette input {
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 15px;
+  outline: none;
+  padding: 14px 16px;
+  width: 100%;
+}
+
+.palette ul {
+  list-style: none;
+  padding: 6px;
+}
+
+.palette li button {
+  border-radius: 4px;
+  color: var(--bone-dim);
+  display: block;
+  padding: 9px 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.palette li strong {
+  color: var(--bone);
+  margin-right: 6px;
+}
+
+.palette li button.is-active,
+.palette li button:hover {
+  background: rgba(122, 20, 36, 0.5);
+}
+
+.palette__empty {
+  color: var(--bone-dim);
+  padding: 10px;
+}
+
+/* Small screens: stack the panels and let the page scroll. */
+@media (max-width: 900px) {
+  .terminal {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    height: auto;
+    padding: 10px 16px;
+  }
+
+  .search {
+    margin-left: 0;
+    order: 5;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .source {
+    display: none;
+  }
+
+  .status {
+    margin-left: auto;
+    min-width: 0;
+  }
+
+  .grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chart {
+    height: 280px;
+  }
+
+  .book__body {
+    flex: none;
+  }
+
+  .book__side {
+    flex: none;
+    height: 190px;
+  }
+
+  .trades {
+    height: 210px;
+  }
+
+  .markets__list {
+    display: flex;
+    overflow-x: auto;
+  }
+
+  .market {
+    flex: none;
+    gap: 16px;
+    width: auto;
+  }
+
+  .markets__hint {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book__skeleton {
+    animation: none;
+  }
+}
